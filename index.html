@@ -31,16 +31,6 @@
             font-size: 1.8rem;
             font-weight: bold;
             color: var(--accent-color);
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
-        }
-        nav a {
-            color: var(--text-muted);
-            text-decoration: none;
-            margin-left: 20px;
-            font-weight: 600;
-        }
-        nav a:hover {
-            color: var(--accent-color);
         }
         .container {
             max-width: 1200px;
@@ -58,7 +48,6 @@
         .hero h1 {
             font-size: 2.3rem;
             margin-bottom: 15px;
-            color: var(--text-color);
         }
         .hero p {
             color: var(--text-muted);
@@ -74,8 +63,6 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.2s;
         }
         .btn:hover {
             background: #00ccaa;
@@ -84,7 +71,6 @@
             border-left: 4px solid var(--accent-color);
             padding-left: 12px;
             margin-bottom: 20px;
-            font-size: 1.5rem;
         }
         .grid {
             display: grid;
@@ -97,11 +83,6 @@
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid #2a2d3d;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
         }
         .card-img {
             height: 140px;
@@ -118,14 +99,12 @@
         }
         .card-content h3 {
             margin: 0 0 10px 0;
-            font-size: 1.2rem;
         }
         .card-content p {
             color: var(--text-muted);
             font-size: 0.9rem;
             margin: 0 0 15px 0;
         }
-        /* Modal Popup Window for Games */
         #gameModal {
             position: fixed;
             top: 0;
@@ -145,7 +124,6 @@
             border: 2px solid var(--accent-color);
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 0 30px rgba(0,255,204,0.3);
         }
         .modal-header {
             background: #15171e;
@@ -173,9 +151,8 @@
             text-align: center;
         }
         canvas {
-            background: linear-gradient(to bottom, #4a90e2, #c5dff8);
+            background: #111;
             border-radius: 6px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
             display: block;
             margin: 0 auto;
         }
@@ -185,18 +162,12 @@
 
     <header>
         <div class="logo">GALATRIX</div>
-        <nav>
-            <a href="#">Home</a>
-            <a href="#">Discover</a>
-            <a href="#">Multiplayer</a>
-        </nav>
     </header>
 
     <div class="container">
         <div class="hero">
-            <h1>Unblocked Voxel Sandbox Universe</h1>
-            <p>Click any game below to launch it instantly in your browser with zero downloads required.</p>
-            <button class="btn" onclick="alert('Select any game card below to start playing!')">Play Now</button>
+            <h1>Unblocked Voxel Sandbox Hub</h1>
+            <p>Click any card below to launch unique arcade and action games.</p>
         </div>
 
         <h2>Featured Games</h2>
@@ -205,8 +176,8 @@
                 <div class="card-img" style="background: linear-gradient(135deg, #0077be, #00ffcc);">Escape Tsunami</div>
                 <div class="card-content">
                     <h3>Escape Tsunami</h3>
-                    <p>Run away from the massive incoming wave and collect brainrot memes to survive.</p>
-                    <button class="btn play-btn" data-game="Escape Tsunami">Launch Game</button>
+                    <p>Run away from the massive incoming wave and dodge obstacles.</p>
+                    <button class="btn play-btn" data-game="tsunami">Play Game</button>
                 </div>
             </div>
 
@@ -214,8 +185,8 @@
                 <div class="card-img" style="background: linear-gradient(135deg, #c0392b, #e74c3c);">Parkour Obby</div>
                 <div class="card-content">
                     <h3>Parkour Obby</h3>
-                    <p>Classic obstacle course jumping and timing challenges in 3D blocky environments.</p>
-                    <button class="btn play-btn" data-game="Parkour Obby">Launch Game</button>
+                    <p>Jump across platforms and time your leaps to reach the top.</p>
+                    <button class="btn play-btn" data-game="parkour">Play Game</button>
                 </div>
             </div>
 
@@ -223,14 +194,13 @@
                 <div class="card-img" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">FFA.PVP Arena</div>
                 <div class="card-content">
                     <h3>FFA.PVP Arena</h3>
-                    <p>Free-for-all player versus player combat arena designed for fast action sessions.</p>
-                    <button class="btn play-btn" data-game="FFA.PVP Arena">Launch Game</button>
+                    <p>Click targets as fast as you can in this combat reflex trainer.</p>
+                    <button class="btn play-btn" data-game="pvp">Play Game</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Game Modal Window -->
     <div id="gameModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -238,7 +208,6 @@
                 <button id="closeModal">Close</button>
             </div>
             <div class="modal-body">
-                <p style="color: #a0a0b0; margin-bottom: 15px;">Use your mouse or keyboard to play!</p>
                 <canvas id="gameCanvas" width="700" height="350"></canvas>
             </div>
         </div>
@@ -248,69 +217,86 @@
         const modal = document.getElementById("gameModal");
         const closeModal = document.getElementById("closeModal");
         const modalTitle = document.getElementById("modalTitle");
-        const playButtons = document.querySelectorAll(".play-btn");
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
+        let animationFrameId;
+        let currentGame = "";
 
-        let animationId;
-        let isPlaying = false;
-
-        playButtons.forEach(button => {
-            button.addEventListener("click", (e) => {
-                const gameName = e.target.getAttribute("data-game");
-                modalTitle.innerText = gameName;
+        document.querySelectorAll(".play-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                currentGame = e.target.getAttribute("data-game");
                 modal.style.display = "flex";
-                startMiniGame();
+                if(currentGame === "tsunami") modalTitle.innerText = "Escape Tsunami";
+                if(currentGame === "parkour") modalTitle.innerText = "Parkour Obby";
+                if(currentGame === "pvp") modalTitle.innerText = "FFA.PVP Arena";
+                startSelectedGame();
             });
         });
 
         closeModal.addEventListener("click", () => {
             modal.style.display = "none";
-            isPlaying = false;
-            cancelAnimationFrame(animationId);
+            cancelAnimationFrame(animationFrameId);
         });
 
-        function startMiniGame() {
-            isPlaying = true;
-            let playerX = 100;
-            let obstacleX = 650;
-            let score = 0;
+        function startSelectedGame() {
+            cancelAnimationFrame(animationFrameId);
 
-            window.addEventListener("keydown", (e) => {
-                if (e.key === "ArrowRight" || e.key === "d") playerX += 15;
-                if (e.key === "ArrowLeft" || e.key === "a") playerX -= 15;
-            });
-
-            function loop() {
-                if (!isPlaying) return;
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                // Ground
-                ctx.fillStyle = "#2e7d32";
-                ctx.fillRect(0, 300, canvas.width, 50);
-
-                // Player
-                ctx.fillStyle = "#ff0055";
-                ctx.fillRect(playerX, 250, 35, 50);
-
-                // Obstacle
-                ctx.fillStyle = "#333333";
-                ctx.fillRect(obstacleX, 260, 30, 40);
-
-                obstacleX -= 5;
-                if (obstacleX < -50) {
-                    obstacleX = canvas.width + Math.random() * 100;
-                    score += 10;
+            if (currentGame === "tsunami") {
+                let playerX = 100, obsX = 600, score = 0;
+                function loop() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = "#2e7d32"; ctx.fillRect(0, 300, canvas.width, 50);
+                    ctx.fillStyle = "#ff0055"; ctx.fillRect(playerX, 250, 30, 50);
+                    ctx.fillStyle = "#333"; ctx.fillRect(obsX, 260, 25, 40);
+                    obsX -= 5;
+                    if(obsX < -50) { obsX = canvas.width + Math.random()*150; score += 10; }
+                    ctx.fillStyle = "#fff"; ctx.font = "16px sans-serif";
+                    ctx.fillText("Tsunami Score: " + score, 20, 30);
+                    animationFrameId = requestAnimationFrame(loop);
                 }
-
-                // Score text
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 16px sans-serif";
-                ctx.fillText("Score: " + score, 20, 30);
-
-                animationId = requestAnimationFrame(loop);
+                loop();
+            } 
+            else if (currentGame === "parkour") {
+                let py = 250, vy = 0, platX = 500, score = 0;
+                window.onkeydown = () => { if(py >= 250) vy = -10; };
+                function loop() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    vy += 0.5; py += vy;
+                    if(py > 250) { py = 250; vy = 0; }
+                    ctx.fillStyle = "#1e90ff"; ctx.fillRect(100, py, 30, 30);
+                    ctx.fillStyle = "#f39c12"; ctx.fillRect(platX, 270, 60, 30);
+                    platX -= 4;
+                    if(platX < -60) { platX = canvas.width + 100; score += 15; }
+                    ctx.fillStyle = "#fff"; ctx.font = "16px sans-serif";
+                    ctx.fillText("Press Any Key to Jump | Score: " + score, 20, 30);
+                    animationFrameId = requestAnimationFrame(loop);
+                }
+                loop();
+            } 
+            else if (currentGame === "pvp") {
+                let targetX = 350, targetY = 175, score = 0;
+                canvas.onclick = (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const mx = e.clientX - rect.left;
+                    const my = e.clientY - rect.top;
+                    if(Math.hypot(mx - targetX, my - targetY) < 25) {
+                        score += 100;
+                        targetX = Math.random() * 500 + 100;
+                        targetY = Math.random() * 200 + 75;
+                    }
+                };
+                function loop() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = "#e74c3c";
+                    ctx.beginPath();
+                    ctx.arc(targetX, targetY, 25, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = "#fff"; ctx.font = "16px sans-serif";
+                    ctx.fillText("Click the Target! Score: " + score, 20, 30);
+                    animationFrameId = requestAnimationFrame(loop);
+                }
+                loop();
             }
-            loop();
         }
     </script>
 </body>
