@@ -4,218 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escape Tsunami: Brainrot Edition</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: #1a1a1a;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-        h1 {
-            margin: 5px;
-            font-size: 1.8rem;
-            color: #00ffcc;
-            text-shadow: 2px 2px #ff00ff;
-        }
-        #game-container {
-            position: relative;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
-            border: 4px solid #333;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        canvas {
-            background: linear-gradient(to bottom, #87CEEB, #E0F6FF);
-            display: block;
-        }
-        #ui {
-            margin-top: 10px;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>ESCAPE TSUNAMI: BRAINROT EDITION</h1>
-    <div id="game-container">
-        <canvas id="gameCanvas" width="800" height="400"></canvas>
+    <div id="game-wrapper">
+        <header>
+            <h1>ESCAPE TSUNAMI: BRAINROT EDITION</h1>
+            <div id="stats-bar">
+                <span>Score: <strong id="scoreVal">0</strong></span>
+                <span>Level: <strong id="levelVal">1</strong></span>
+            </div>
+        </header>
+
+        <div id="game-container">
+            <canvas id="gameCanvas" width="900" height="450"></canvas>
+            <div id="instructions">Use LEFT / RIGHT arrows or A / D to run away from the wave! Avoid obstacles and collect brainrot powerups.</div>
+        </div>
     </div>
-    <div id="ui">Score: <span id="scoreVal">0</span> | Use LEFT/RIGHT Arrows or A/D to Run!</div>
 
-    <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
-        const scoreEl = document.getElementById("scoreVal");
-
-        let score = 0;
-        let isGameOver = false;
-
-        // Player object
-        let player = {
-            x: 100,
-            y: 310,
-            width: 40,
-            height: 50,
-            speed: 6,
-            dx: 0,
-            color: "#ff0055"
-        };
-
-        // Tsunami wave chasing the player
-        let tsunami = {
-            x: -300,
-            y: 0,
-            width: 250,
-            height: 400,
-            speed: 1.8
-        };
-
-        // Collectibles (Meme items)
-        let collectibles = [];
-        let spawnTimer = 0;
-
-        let keys = {};
-
-        window.addEventListener("keydown", (e) => {
-            keys[e.key] = true;
-            if (e.key === " " && isGameOver) {
-                resetGame();
-            }
-        });
-
-        window.addEventListener("keyup", (e) => {
-            keys[e.key] = false;
-        });
-
-        function spawnCollectible() {
-            collectibles.push({
-                x: canvas.width + Math.random() * 200,
-                y: 320,
-                width: 30,
-                height: 30,
-                text: ["SKIBIDI", "RIZZ", "SIGMA", "GYATT"][Math.floor(Math.random() * 4)]
-            });
-        }
-
-        function update() {
-            if (isGameOver) return;
-
-            // Player movement
-            if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
-                player.x -= player.speed;
-            }
-            if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
-                player.x += player.speed;
-            }
-
-            // Boundaries
-            if (player.x < 0) player.x = 0;
-            if (player.x > canvas.width - player.width) player.x = canvas.width - player.width;
-
-            // Tsunami advances slowly, speeds up with score
-            tsunami.x += tsunami.speed + (score * 0.02);
-
-            // Check if tsunami catches player
-            if (tsunami.x + tsunami.width > player.x) {
-                isGameOver = true;
-            }
-
-            // Spawn collectibles
-            spawnTimer++;
-            if (spawnTimer > 90) {
-                spawnCollectible();
-                spawnTimer = 0;
-            }
-
-            // Move and check collectibles
-            for (let i = collectibles.length - 1; i >= 0; i--) {
-                collectibles[i].x -= 3;
-
-                // Collision with player
-                if (
-                    player.x < collectibles[i].x + collectibles[i].width &&
-                    player.x + player.width > collectibles[i].x &&
-                    player.y < collectibles[i].y + collectibles[i].height &&
-                    player.y + player.height > collectibles[i].y
-                ) {
-                    score += 10;
-                    scoreEl.innerText = score;
-                    collectibles.splice(i, 1);
-                } else if (collectibles[i] && collectibles[i].x < -50) {
-                    collectibles.splice(i, 1);
-                }
-            }
-        }
-
-        function draw() {
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Draw ground
-            ctx.fillStyle = "#557a2b";
-            ctx.fillRect(0, 360, canvas.width, 40);
-
-            // Draw player
-            ctx.fillStyle = player.color;
-            ctx.fillRect(player.x, player.y, player.width, player.height);
-            ctx.fillStyle = "#ffffff";
-            ctx.font = "10px sans-serif";
-            ctx.fillText("SIGMA", player.x + 4, player.y - 5);
-
-            // Draw collectibles
-            ctx.fillStyle = "#ffd700";
-            ctx.font = "12px bold sans-serif";
-            collectibles.forEach(item => {
-                ctx.fillRect(item.x, item.y, item.width, item.height);
-                ctx.fillStyle = "#000";
-                ctx.fillText(item.text, item.x - 5, item.y - 5);
-                ctx.fillStyle = "#ffd700";
-            });
-
-            // Draw Tsunami Wave
-            ctx.fillStyle = "rgba(0, 119, 190, 0.8)";
-            ctx.fillRect(tsunami.x, tsunami.y, tsunami.width, tsunami.height);
-            ctx.fillStyle = "#ffffff";
-            ctx.font = "20px bold sans-serif";
-            ctx.fillText("TSUNAMI OF RIZZ", tsunami.x + 20, 50);
-
-            // Game Over screen
-            if (isGameOver) {
-                ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = "#ff0055";
-                ctx.font = "30px sans-serif";
-                ctx.fillText("GAME OVER - THE WAVE GOT YOU", 150, 180);
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "16px sans-serif";
-                ctx.fillText("Press SPACEBAR to restart", 290, 220);
-            }
-        }
-
-        function resetGame() {
-            player.x = 100;
-            tsunami.x = -300;
-            score = 0;
-            scoreEl.innerText = score;
-            collectibles = [];
-            isGameOver = false;
-        }
-
-        function loop() {
-            update();
-            draw();
-            requestAnimationFrame(loop);
-        }
-
-        loop();
-    </script>
+    <script src="game.js"></script>
 </body>
 </html>
