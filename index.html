@@ -5,404 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galatrix Unblocked Games Hub</title>
     <style>
-        :root {
-            --bg-color: #0f1015;
-            --card-bg: #1a1c23;
-            --accent-color: #00ffcc;
-            --text-color: #ffffff;
-            --text-muted: #a0a0b0;
-        }
-        body {
-            margin: 0;
-            padding: 0;
-            background: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        header {
-            background: #15171e;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #2a2d3d;
-        }
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--accent-color);
-        }
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-        .hero {
-            background: linear-gradient(135deg, #1f2333, #12141c);
-            padding: 40px;
-            border-radius: 12px;
-            border: 1px solid #2a2d3d;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-        .hero h1 {
-            font-size: 2.3rem;
-            margin-bottom: 15px;
-        }
-        .hero p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            max-width: 800px;
-            margin: 0 auto 25px auto;
-        }
-        .btn {
-            background: var(--accent-color);
-            color: #0f1015;
-            padding: 10px 25px;
-            font-weight: bold;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background: #00ccaa;
-        }
-        h2 {
-            border-left: 4px solid var(--accent-color);
-            padding-left: 12px;
-            margin-bottom: 20px;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        .card {
-            background: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #2a2d3d;
-        }
-        .card-img {
-            height: 140px;
-            background: #2a2d3d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #fff;
-            font-size: 1.2rem;
-        }
-        .card-content {
-            padding: 20px;
-        }
-        .card-content h3 {
-            margin: 0 0 10px 0;
-        }
-        .card-content p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin: 0 0 15px 0;
-        }
-        #gameModal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            width: 800px;
-            max-width: 95%;
-            background: #1a1c23;
-            border: 2px solid var(--accent-color);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .modal-header {
-            background: #15171e;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #2a2d3d;
-        }
-        .modal-header h3 {
-            margin: 0;
-            color: var(--accent-color);
-        }
-        #closeModal {
-            background: #ff0055;
-            color: white;
-            border: none;
-            padding: 6px 14px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        .modal-body {
-            padding: 25px;
-            text-align: center;
-        }
-        canvas {
-            background: #111;
-            border-radius: 6px;
-            display: block;
-            margin: 0 auto;
-            cursor: crosshair;
-        }
+        body { margin: 0; background: #0f1015; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        header { background: #15171e; padding: 20px 40px; border-bottom: 2px solid #2a2d3d; }
+        .logo { font-size: 1.8rem; font-weight: bold; color: #00ffcc; }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .hero { background: linear-gradient(135deg, #1f2333, #12141c); padding: 40px; border-radius: 12px; border: 1px solid #2a2d3d; text-align: center; margin-bottom: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .card { background: #1a1c23; border-radius: 8px; border: 1px solid #2a2d3d; overflow: hidden; }
+        .card-img { height: 140px; background: #2a2d3d; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
+        .card-content { padding: 20px; }
+        .btn { background: #00ffcc; color: #0f1015; padding: 10px 20px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn:hover { background: #00ccaa; }
     </style>
 </head>
 <body>
-
-    <header>
-        <div class="logo">GALATRIX</div>
-    </header>
-
+    <header><div class="logo">GALATRIX HUB</div></header>
     <div class="container">
         <div class="hero">
-            <h1>Unblocked Voxel Sandbox Hub</h1>
-            <p>Click any card below to launch three unique, fully playable arcade games.</p>
+            <h1>Select a Game to Play</h1>
+            <p>Each game runs on its own dedicated page with zero lag or script conflicts.</p>
         </div>
-
-        <h2>Featured Games</h2>
         <div class="grid">
             <div class="card">
                 <div class="card-img" style="background: linear-gradient(135deg, #0077be, #00ffcc);">Escape Tsunami</div>
                 <div class="card-content">
                     <h3>Escape Tsunami</h3>
-                    <p>Run away from the massive incoming wave and dodge obstacles.</p>
-                    <button class="btn play-btn" data-game="tsunami">Play Game</button>
+                    <p>Run from the wave and collect brainrot memes.</p>
+                    <a href="tsunami.html" class="btn">Play Game</a>
                 </div>
             </div>
-
             <div class="card">
                 <div class="card-img" style="background: linear-gradient(135deg, #c0392b, #e74c3c);">Parkour Obby</div>
                 <div class="card-content">
                     <h3>Parkour Obby</h3>
-                    <p>Jump across platforms and time your leaps to reach the top.</p>
-                    <button class="btn play-btn" data-game="parkour">Play Game</button>
+                    <p>Jump across platforms and time your leaps.</p>
+                    <a href="parkour.html" class="btn">Play Game</a>
                 </div>
             </div>
-
             <div class="card">
                 <div class="card-img" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">FFA.PVP Arena</div>
                 <div class="card-content">
                     <h3>FFA.PVP Arena</h3>
-                    <p>Click targets as fast as you can in this combat reflex trainer.</p>
-                    <button class="btn play-btn" data-game="pvp">Play Game</button>
+                    <p>Test your reflexes by clicking targets.</p>
+                    <a href="pvp.html" class="btn">Play Game</a>
                 </div>
             </div>
         </div>
     </div>
-
-    <div id="gameModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalTitle">Game Title</h3>
-                <button id="closeModal">Close</button>
-            </div>
-            <div class="modal-body">
-                <canvas id="gameCanvas" width="700" height="350"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const modal = document.getElementById("gameModal");
-        const closeModal = document.getElementById("closeModal");
-        const modalTitle = document.getElementById("modalTitle");
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
-        let animationFrameId;
-        let currentGame = "";
-
-        document.querySelectorAll(".play-btn").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                currentGame = e.target.getAttribute("data-game");
-                modal.style.display = "flex";
-                if(currentGame === "tsunami") modalTitle.innerText = "Escape Tsunami";
-                if(currentGame === "parkour") modalTitle.innerText = "Parkour Obby";
-                if(currentGame === "pvp") modalTitle.innerText = "FFA.PVP Arena";
-                startSelectedGame();
-            });
-        });
-
-        closeModal.addEventListener("click", () => {
-            modal.style.display = "none";
-            cancelAnimationFrame(animationFrameId);
-        });
-
-        function startSelectedGame() {
-            cancelAnimationFrame(animationFrameId);
-            if(currentGame === "tsunami") runTsunamiGame();
-            if(currentGame === "parkour") runParkourGame();
-            if(currentGame === "pvp") runPvpGame();
-        }
-
-        // GAME 1: ESCAPE TSUNAMI
-        function runTsunamiGame() {
-            let playerX = 150, playerY = 250, isJumping = false, jumpVel = 0;
-            let obstacleX = 700, score = 0;
-            let keys = {};
-
-            window.onkeydown = e => keys[e.key] = true;
-            window.onkeyup = e => keys[e.key] = false;
-
-            function loop() {
-                if(modal.style.display === "none") return;
-                ctx.clearRect(0,0,canvas.width,canvas.height);
-
-                // Sky & Ground
-                ctx.fillStyle = "#87ceeb"; ctx.fillRect(0,0,canvas.width,canvas.height);
-                ctx.fillStyle = "#2e7d32"; ctx.fillRect(0,300,canvas.width,50);
-
-                // Controls & Physics
-                if((keys["ArrowUp"] || keys[" "] || keys["w"]) && !isJumping) {
-                    isJumping = true;
-                    jumpVel = -12;
-                }
-                playerY += jumpVel;
-                jumpVel += 0.6;
-                if(playerY > 250) { playerY = 250; isJumping = false; }
-
-                obstacleX -= 5;
-                if(obstacleX < -40) { obstacleX = 700; score += 10; }
-
-                // Draw Player
-                ctx.fillStyle = "#ff0055";
-                ctx.fillRect(playerX, playerY, 30, 50);
-
-                // Draw Obstacle
-                ctx.fillStyle = "#333";
-                ctx.fillRect(obstacleX, 260, 30, 40);
-
-                // Score
-                ctx.fillStyle = "#fff";
-                ctx.font = "bold 16px sans-serif";
-                ctx.fillText("Score: " + score, 20, 30);
-                ctx.fillText("Controls: UP or SPACE to Jump", 20, 55);
-
-                animationFrameId = requestAnimationFrame(loop);
-            }
-            loop();
-        }
-
-        // GAME 2: PARKOUR OBBY
-        function runParkourGame() {
-            let playerX = 100, playerY = 250, isJumping = false, jumpVel = 0;
-            let platforms = [
-                {x: 300, y: 240, w: 100, h: 20},
-                {x: 500, y: 180, w: 100, h: 20},
-                {x: 700, y: 120, w: 100, h: 20}
-            ];
-            let score = 0;
-            let keys = {};
-
-            window.onkeydown = e => keys[e.key] = true;
-            window.onkeyup = e => keys[e.key] = false;
-
-            function loop() {
-                if(modal.style.display === "none") return;
-                ctx.clearRect(0,0,canvas.width,canvas.height);
-
-                ctx.fillStyle = "#1e1e2f"; ctx.fillRect(0,0,canvas.width,canvas.height);
-                ctx.fillStyle = "#444"; ctx.fillRect(0,300,canvas.width,50);
-
-                if((keys["ArrowLeft"] || keys["a"]) && playerX > 0) playerX -= 4;
-                if((keys["ArrowRight"] || keys["d"]) && playerX < canvas.width) playerX += 4;
-                if((keys["ArrowUp"] || keys[" "] || keys["w"]) && !isJumping) {
-                    isJumping = true;
-                    jumpVel = -10;
-                }
-
-                playerY += jumpVel;
-                jumpVel += 0.5;
-                if(playerY > 250) { playerY = 250; isJumping = false; }
-
-                // Move platforms left
-                platforms.forEach(p => {
-                    p.x -= 2;
-                    if(p.x < -100) { p.x = canvas.width + Math.random() * 100; p.y = 120 + Math.random() * 120; score += 5; }
-                    
-                    // Draw platform
-                    ctx.fillStyle = "#00ffcc";
-                    ctx.fillRect(p.x, p.y, p.w, p.h);
-
-                    // Collision
-                    if(playerX + 30 > p.x && playerX < p.x + p.w && playerY + 50 >= p.y && playerY + 50 <= p.y + 15 && jumpVel > 0) {
-                        playerY = p.y - 50;
-                        isJumping = false;
-                        jumpVel = 0;
-                    }
-                });
-
-                // Draw Player
-                ctx.fillStyle = "#ff007f";
-                ctx.fillRect(playerX, playerY, 30, 50);
-
-                ctx.fillStyle = "#fff";
-                ctx.font = "bold 16px sans-serif";
-                ctx.fillText("Score: " + score, 20, 30);
-                ctx.fillText("Controls: A/D to Move, SPACE to Jump", 20, 55);
-
-                animationFrameId = requestAnimationFrame(loop);
-            }
-            loop();
-        }
-
-        // GAME 3: FFA.PVP ARENA (AIM TRAINER)
-        function runPvpGame() {
-            let score = 0;
-            let target = { x: 350, y: 175, radius: 25, timer: 0 };
-
-            canvas.onmousedown = (e) => {
-                const rect = canvas.getBoundingClientRect();
-                const mouseX = e.clientX - rect.left;
-                const mouseY = e.clientY - rect.top;
-                const dist = Math.hypot(mouseX - target.x, mouseY - target.y);
-                if(dist < target.radius) {
-                    score += 10;
-                    spawnTarget();
-                }
-            };
-
-            function spawnTarget() {
-                target.x = 50 + Math.random() * (canvas.width - 100);
-                target.y = 50 + Math.random() * (canvas.height - 100);
-            }
-
-            function loop() {
-                if(modal.style.display === "none") return;
-                ctx.clearRect(0,0,canvas.width,canvas.height);
-
-                ctx.fillStyle = "#111827"; ctx.fillRect(0,0,canvas.width,canvas.height);
-
-                // Draw Target
-                ctx.fillStyle = "#ff0055";
-                ctx.beginPath();
-                ctx.arc(target.x, target.y, target.radius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.fillStyle = "#ffffff";
-                ctx.beginPath();
-                ctx.arc(target.x, target.y, target.radius * 0.4, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.fillStyle = "#fff";
-                ctx.font = "bold 16px sans-serif";
-                ctx.fillText("Score: " + score, 20, 30);
-                ctx.fillText("Controls: Click the red targets as fast as you can!", 20, 55);
-
-                animationFrameId = requestAnimationFrame(loop);
-            }
-            loop();
-        }
-    </script>
 </body>
 </html>
