@@ -1,70 +1,170 @@
+:root {
+    --bg-color: #0f1015;
+    --card-bg: #1a1c23;
+    --accent-color: #00ffcc;
+    --text-color: #ffffff;
+    --text-muted: #a0a0b0;
+}
+
 body {
     margin: 0;
     padding: 0;
-    background: #0f0f13;
-    color: #ffffff;
+    background: var(--bg-color);
+    color: var(--text-color);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-}
-
-#game-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: #1e1e24;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-    border: 2px solid #333340;
 }
 
 header {
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-h1 {
-    margin: 0 0 10px 0;
-    font-size: 1.6rem;
-    color: #00ffcc;
-    text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-    letter-spacing: 1px;
-}
-
-#stats-bar {
+    background: #15171e;
+    padding: 20px 40px;
     display: flex;
-    gap: 40px;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #2a2d3d;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--accent-color);
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
+    letter-spacing: 2px;
+}
+
+nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-left: 25px;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+nav a:hover, nav a.active {
+    color: var(--accent-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.hero {
+    background: linear-gradient(135deg, #1f2333, #12141c);
+    padding: 50px;
+    border-radius: 12px;
+    border: 1px solid #2a2d3d;
+    margin-bottom: 40px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.hero p {
+    color: var(--text-muted);
     font-size: 1.1rem;
-    background: #2a2a35;
-    padding: 8px 20px;
+    max-width: 800px;
+    margin: 0 auto 25px auto;
+    line-height: 1.6;
+}
+
+.btn {
+    background: var(--accent-color);
+    color: #0f1015;
+    padding: 12px 30px;
+    font-weight: bold;
+    border: none;
     border-radius: 6px;
-    border: 1px solid #444455;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s, transform 0.1s;
 }
 
-#stats-bar strong {
-    color: #ff007f;
+.btn:hover {
+    background: #00ccaa;
+    transform: translateY(-2px);
 }
 
-#game-container {
-    position: relative;
+h2 {
+    border-left: 4px solid var(--accent-color);
+    padding-left: 12px;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.card {
+    background: var(--card-bg);
     border-radius: 8px;
     overflow: hidden;
-    border: 3px solid #444455;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+    border: 1px solid #2a2d3d;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
 }
 
-canvas {
-    background: linear-gradient(to bottom, #4a90e2, #c5dff8);
-    display: block;
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+    border-color: #44485f;
 }
 
-#instructions {
-    margin-top: 12px;
+.card-img {
+    height: 150px;
+    background: #2a2d3d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+.card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card-content h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+}
+
+.card-content p {
+    color: var(--text-muted);
     font-size: 0.9rem;
-    color: #b0b0c0;
+    margin: 0 0 20px 0;
+    line-height: 1.4;
+    flex-grow: 1;
+}
+
+.play-btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    align-self: flex-start;
+}
+
+footer {
     text-align: center;
+    padding: 30px;
+    color: var(--text-muted);
+    background: #15171e;
+    border-top: 1px solid #2a2d3d;
+    font-size: 0.9rem;
 }
