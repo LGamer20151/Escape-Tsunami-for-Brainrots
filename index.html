@@ -1,56 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galatrix Unblocked Games Hub</title>
-    <style>
-        body { margin: 0; background: #0f1015; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        header { background: #15171e; padding: 20px 40px; border-bottom: 2px solid #2a2d3d; }
-        .logo { font-size: 1.8rem; font-weight: bold; color: #00ffcc; }
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-        .hero { background: linear-gradient(135deg, #1f2333, #12141c); padding: 40px; border-radius: 12px; border: 1px solid #2a2d3d; text-align: center; margin-bottom: 40px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .card { background: #1a1c23; border-radius: 8px; border: 1px solid #2a2d3d; overflow: hidden; }
-        .card-img { height: 140px; background: #2a2d3d; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
-        .card-content { padding: 20px; }
-        .btn { background: #00ffcc; color: #0f1015; padding: 10px 20px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; }
-        .btn:hover { background: #00ccaa; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Escape Tsunami for Brainrots</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-    <header><div class="logo">GALATRIX HUB</div></header>
-    <div class="container">
-        <div class="hero">
-            <h1>Select a Game to Play</h1>
-            <p>Each game runs on its own dedicated page with zero lag or script conflicts.</p>
+<body class="home-page">
+  <header class="site-header">
+    <div class="brand">GALATRIX HUB</div>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="index.html" class="active">Home</a>
+      <a href="tsunami.html">Tsunami</a>
+      <a href="parkour.html">Obby</a>
+      <a href="pvp.html">Arena</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="eyebrow">Brainrot survival collection</p>
+      <h1>Escape Tsunami for Brainrots</h1>
+      <p>
+        Survive the meme flood, sprint through chaotic danger,
+        and collect brainrot power-ups before the wave catches you.
+      </p>
+      <a class="cta-btn" href="tsunami.html">Start the Tsunami</a>
+    </section>
+
+    <section class="games-grid">
+      <article class="game-card">
+        <div class="card-art art-tsunami">Escape Tsunami</div>
+        <div class="card-copy">
+          <h2>Escape Tsunami</h2>
+          <p>Run from the wave, dodge crates, and scoop up brainrot memes for points.</p>
+          <a class="game-btn" href="tsunami.html">Play Game</a>
         </div>
-        <div class="grid">
-            <div class="card">
-                <div class="card-img" style="background: linear-gradient(135deg, #0077be, #00ffcc);">Escape Tsunami</div>
-                <div class="card-content">
-                    <h3>Escape Tsunami</h3>
-                    <p>Run from the wave and collect brainrot memes.</p>
-                    <a href="tsunami.html" class="btn">Play Game</a>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-img" style="background: linear-gradient(135deg, #c0392b, #e74c3c);">Parkour Obby</div>
-                <div class="card-content">
-                    <h3>Parkour Obby</h3>
-                    <p>Jump across platforms and time your leaps.</p>
-                    <a href="parkour.html" class="btn">Play Game</a>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-img" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">FFA.PVP Arena</div>
-                <div class="card-content">
-                    <h3>FFA.PVP Arena</h3>
-                    <p>Test your reflexes by clicking targets.</p>
-                    <a href="pvp.html" class="btn">Play Game</a>
-                </div>
-            </div>
+      </article>
+
+      <article class="game-card">
+        <div class="card-art art-obby">Parkour Obby</div>
+        <div class="card-copy">
+          <h2>Parkour Obby</h2>
+          <p>Leap across floating platforms and reach the exit before the floor drops away.</p>
+          <a class="game-btn" href="parkour.html">Play Game</a>
         </div>
-    </div>
+      </article>
+
+      <article class="game-card">
+        <div class="card-art art-pvp">FFA.PVP Arena</div>
+        <div class="card-copy">
+          <h2>FFA.PVP Arena</h2>
+          <p>Click the moving targets, keep your streak alive, and outscore the chaos.</p>
+          <a class="game-btn" href="pvp.html">Play Game</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    Made for brainrot chaos and survival energy.
+  </footer>
+
+  <script src="app.js"></script>
 </body>
 </html>

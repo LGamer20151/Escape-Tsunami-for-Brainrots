@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parkour Obby - Galatrix</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="game-page">
+  <div class="game-shell">
+    <div class="game-topbar">
+      <h1 class="game-title">Parkour Obby</h1>
+      <div class="game-buttons">
+        <a class="action-btn" href="index.html">Home</a>
+        <button class="action-btn" id="restartBtn">Restart</button>
+      </div>
+    </div>
+
+    <div class="canvas-wrap">
+      <canvas id="gameCanvas" width="900" height="520"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const restartBtn = document.getElementById("restartBtn");
+
+    const player = {
+      x: 80,
+      y: 420,
+      width: 26,
+      height: 26,
+      vy: 0,
+      onGround: false,
+      speed: 250,
+      jumpForce: 480
+    };
+
+    const platforms = [
+      { x: 0, y: 480, width: 200, height: 40 },
+      { x: 230, y: 430, width: 120, height: 20 },
+      { x: 390, y: 370, width: 120, height: 20 },
+      { x: 560, y: 300, width: 120, height: 20 },
+      { x: 710, y: 240, width: 130, height: 20 },
+      { x: 840, y: 200, width: 40, height: 20 }
+    ];
+
+    const goal = { x: 870, y: 150, width: 18, height: 50 };
+    let keys = {};
+    let won = false;
+    let lastTime = 0;
+
+    function resetGame() {
+      player.x = 80;
+      player.y = 420;
+      player.vy = 0;
+      player.onGround = false;
+      won = false;
+    }
+
+    function intersects(a, b) {
+      return a.x < b.x + b.width &&
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y;
+    }
+
+    function update(dt) {
+      if (won) return;
+
+      const move = (keys.ArrowRight || keys.d ? 1 : 0) - (keys.ArrowLeft || keys.a ? 1 : 0);
+
+      player.x += move * player.speed * dt;
+      player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+
+      player.vy += 900 * dt;
+      player.y += player.vy * dt;
+
+      player.onGround = false;
+      for (const platform of platforms) {
+        if (intersects(player, platform)) {
+          const prevBottom = player.y - player.vy * dt + player.height;
+          const platformTop = platform.y;
+
+          if (prevBottom <= platformTop + 10 && player.vy >= 0) {
+            player.y = platform.y - player.height;
+            player.vy = 0;
+            player.onGround = true;
+          }
+        }
+      }
+
+      if (keys.ArrowUp || keys.w || keys[" "]) {
+        if (player.onGround) {
+          player.vy = -player.jumpForce;
+          player.onGround = false;
+        }
+        keys[" "] = false;
+        keys.ArrowUp = false;
+        keys.w = false;
+      }
+
+      if (player.y > canvas.height + 20) {
+        resetGame();
+      }
+
+      if (intersects(player, goal)) {
+        won = true;
+      }
+    }
+
+    function drawBackground() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const sky = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      sky.addColorStop(0, "#2d5bff");
+      sky.addColorStop(1, "#d9f1ff");
+      ctx.fillStyle = sky;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#2e7d32";
+      ctx.fillRect(0, 490, canvas.width, 30);
+
+      platforms.forEach((platform) => {
+        ctx.fillStyle = "#1f2937";
+        ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+      });
+
+      ctx.fillStyle = "#ffd166";
+      ctx.fillRect(goal.x, goal.y, goal.width, goal.height);
+    }
+
+    function drawPlayer() {
+      ctx.fillStyle = won ? "#22c55e" : "#ff0055";
+      ctx.fillRect(player.x, player.y, player.width, player.height);
+    }
+
+    function drawOverlay() {
+      if (!won) return;
+      ctx.fillStyle = "rgba(0,0,0,0.5)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 42px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("OBBY CLEARED!", canvas.width / 2, canvas.height / 2);
+    }
+
+    function loop(timestamp) {
+      const dt = Math.min((timestamp - lastTime) / 1000 || 0.016, 0.025);
+      lastTime = timestamp;
+
+      update(dt);
+      drawBackground();
+      drawPlayer();
+      drawOverlay();
+      requestAnimationFrame(loop);
+    }
+
+    document.addEventListener("keydown", (event) => {
+      const k = event.key.toLowerCase();
+      keys[k] = true;
+      keys[event.key] = true;
+      if (event.code === "Space") keys[" "] = true;
+    });
+
+    document.addEventListener("keyup", (event) => {
+      const k = event.key.toLowerCase();
+      keys[k] = false;
+      keys[event.key] = false;
+      if (event.code === "Space") keys[" "] = false;
+    });
+
+    restartBtn.addEventListener("click", resetGame);
+    resetGame();
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>

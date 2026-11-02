@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Escape Tsunami for Brainrots</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="game-page">
+  <div class="game-shell">
+    <div class="game-topbar">
+      <h1 class="game-title">Escape Tsunami</h1>
+      <div class="game-buttons">
+        <a class="action-btn" href="index.html">Home</a>
+        <button class="action-btn" id="restartBtn">Restart</button>
+      </div>
+    </div>
+
+    <div class="game-hud">
+      <span id="scoreLabel">Score: 0</span>
+      <span id="healthLabel">Health: 3</span>
+      <span id="timerLabel">Time: 60</span>
+    </div>
+
+    <div class="canvas-wrap">
+      <canvas id="gameCanvas" width="900" height="520"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const scoreLabel = document.getElementById("scoreLabel");
+    const healthLabel = document.getElementById("healthLabel");
+    const timerLabel = document.getElementById("timerLabel");
+    const restartBtn = document.getElementById("restartBtn");
+
+    const keys = {};
+    const brainrotWords = ["Sigma", "Rizz", "Skibidi", "Fanum", "Gyatt", "Mewing", "Goofy", "Ohio"];
+
+    const player = {
+      x: 90,
+      y: canvas.height - 100,
+      radius: 18,
+      speed: 260,
+      health: 3,
+      invulnerable: 0
+    };
+
+    let score = 0;
+    let timeLeft = 60;
+    let waveY = canvas.height - 70;
+    let gameOver = false;
+    let won = false;
+    let spawnTimer = 0;
+    let obstacleTimer = 0;
+    let collectibles = [];
+    let obstacles = [];
+
+    function resetGame() {
+      score = 0;
+      timeLeft = 60;
+      waveY = canvas.height - 70;
+      gameOver = false;
+      won = false;
+      player.x = 90;
+      player.y = canvas.height - 100;
+      player.health = 3;
+      player.invulnerable = 0;
+      collectibles = [];
+      obstacles = [];
+      spawnTimer = 0;
+      obstacleTimer = 0;
+      updateHud();
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function spawnCollectible() {
+      collectibles.push({
+        x: 40 + Math.random() * (canvas.width - 80),
+        y: 40 + Math.random() * (canvas.height - 170),
+        radius: 14,
+        word: brainrotWords[Math.floor(Math.random() * brainrotWords.length)]
+      });
+    }
+
+    function spawnObstacle() {
+      obstacles.push({
+        x: canvas.width + 30,
+        y: 80 + Math.random() * (canvas.height - 180),
+        width: 32,
+        height: 32,
+        speed: 180 + Math.random() * 120
+      });
+    }
+
+    function updateHud() {
+      scoreLabel.textContent = `Score: ${score}`;
+      healthLabel.textContent = `Health: ${player.health}`;
+      timerLabel.textContent = `Time: ${Math.ceil(timeLeft)}`;
+    }
+
+    function update(dt) {
+      if (gameOver) return;
+
+      timeLeft -= dt;
+      if (timeLeft <= 0) {
+        timeLeft = 0;
+        won = true;
+        gameOver = true;
+        updateHud();
+        return;
+      }
+
+      waveY -= dt * 6;
+      if (waveY < 90) waveY = 90;
+
+      const moveX = (keys.ArrowRight || keys.d ? 1 : 0) - (keys.ArrowLeft || keys.a ? 1 : 0);
+      const moveY = (keys.ArrowDown || keys.s ? 1 : 0) - (keys.ArrowUp || keys.w ? 1 : 0);
+
+      player.x += moveX * player.speed * dt;
+      player.y += moveY * player.speed * dt;
+      player.x = clamp(player.x, 20, canvas.width - 20);
+      player.y = clamp(player.y, 20, canvas.height - 20);
+
+      spawnTimer -= dt;
+      obstacleTimer -= dt;
+
+      if (spawnTimer <= 0) {
+        spawnTimer = 1.1 + Math.random() * 0.8;
+        spawnCollectible();
+      }
+
+      if (obstacleTimer <= 0) {
+        obstacleTimer = 1.2 + Math.random() * 1.5;
+        spawnObstacle();
+      }
+
+      for (let i = obstacles.length - 1; i >= 0; i--) {
+        const obstacle = obstacles[i];
+        obstacle.x -= obstacle.speed * dt;
+
+        if (obstacle.x + obstacle.width < 0) {
+          obstacles.splice(i, 1);
+          continue;
+        }
+
+        if (
+          player.x + player.radius > obstacle.x &&
+          player.x - player.radius < obstacle.x + obstacle.width &&
+          player.y + player.radius > obstacle.y &&
+          player.y - player.radius < obstacle.y + obstacle.height
+        ) {
+          if (player.invulnerable <= 0) {
+            player.health -= 1;
+            player.invulnerable = 1.2;
+            if (player.health <= 0) {
+              gameOver = true;
+              updateHud();
+              return;
+            }
+          }
+          obstacles.splice(i, 1);
+        }
+      }
+
+      for (let i = collectibles.length - 1; i >= 0; i--) {
+        const item = collectibles[i];
+        const dx = player.x - item.x;
+        const dy = player.y - item.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < player.radius + item.radius) {
+          collectibles.splice(i, 1);
+          score += 10;
+          updateHud();
+        }
+      }
+
+      if (player.y + player.radius >= waveY) {
+        gameOver = true;
+        updateHud();
+      }
+
+      player.invulnerable = Math.max(0, player.invulnerable - dt);
+      updateHud();
+    }
+
+    function drawBackground() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const sky = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      sky.addColorStop(0, "#4f9df7");
+      sky.addColorStop(0.65, "#cfeaff");
+      sky.addColorStop(1, "#a9f0c1");
+      ctx.fillStyle = sky;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "rgba(255,255,255,0.35)";
+      for (let i = 0; i < 8; i++) {
+        const x = (i * 130 + (timeLeft * 8) % 130) % (canvas.width + 120);
+        const y = 50 + (i % 3) * 34;
+        ctx.beginPath();
+        ctx.arc(x, y, 18, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.fillStyle = "#2e7d32";
+      ctx.fillRect(0, canvas.height - 70, canvas.width, 70);
+
+      ctx.fillStyle = "#1d5cbf";
+      ctx.fillRect(0, waveY, canvas.width, canvas.height - waveY);
+
+      ctx.fillStyle = "rgba(255,255,255,0.2)";
+      for (let i = 0; i < 15; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * 70, waveY + 16);
+        ctx.quadraticCurveTo(i * 70 + 35, waveY - 16, i * 70 + 70, waveY + 16);
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(255,255,255,0.3)";
+        ctx.lineWidth = 2;
+      }
+    }
+
+    function drawPlayer() {
+      ctx.save();
+      ctx.translate(player.x, player.y);
+
+      if (player.invulnerable > 0) {
+        ctx.globalAlpha = 0.6 + Math.sin(Date.now() * 0.02) * 0.4;
+      }
+
+      ctx.fillStyle = "#ff0055";
+      ctx.fillRect(-18, -18, 36, 36);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(-8, -8, 16, 10);
+      ctx.restore();
+    }
+
+    function drawCollectibles() {
+      collectibles.forEach((item) => {
+        ctx.beginPath();
+        ctx.fillStyle = "#ffd166";
+        ctx.arc(item.x, item.y, item.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#1a1a1a";
+        ctx.font = "bold 10px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(item.word, item.x, item.y + 3);
+      });
+    }
+
+    function drawObstacles() {
+      obstacles.forEach((obstacle) => {
+        ctx.fillStyle = "#374151";
+        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+        ctx.strokeStyle = "#9ca3af";
+        ctx.strokeRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+      });
+    }
+
+    function drawOverlay() {
+      if (!gameOver) return;
+
+      ctx.fillStyle = "rgba(5, 8, 14, 0.6)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 42px sans-serif";
+      ctx.textAlign = "center";
+
+      if (won) {
+        ctx.fillText("YOU ESCAPED!", canvas.width / 2, canvas.height / 2 - 12);
+        ctx.font = "24px sans-serif";
+        ctx.fillText(`Final score: ${score}`, canvas.width / 2, canvas.height / 2 + 32);
+      } else {
+        ctx.fillText("WAVE GOT YOU!", canvas.width / 2, canvas.height / 2 - 12);
+        ctx.font = "24px sans-serif";
+        ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2 + 32);
+      }
+    }
+
+    let lastTime = 0;
+    function loop(timestamp) {
+      const dt = Math.min((timestamp - lastTime) / 1000 || 0.016, 0.033);
+      lastTime = timestamp;
+
+      update(dt);
+      drawBackground();
+      drawCollectibles();
+      drawObstacles();
+      drawPlayer();
+      drawOverlay();
+
+      requestAnimationFrame(loop);
+    }
+
+    document.addEventListener("keydown", (event) => {
+      keys[event.key.toLowerCase()] = true;
+    });
+
+    document.addEventListener("keyup", (event) => {
+      keys[event.key.toLowerCase()] = false;
+    });
+
+    restartBtn.addEventListener("click", resetGame);
+    resetGame();
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FFA.PVP Arena</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="game-page">
+  <div class="game-shell">
+    <div class="game-topbar">
+      <h1 class="game-title">FFA.PVP Arena</h1>
+      <div class="game-buttons">
+        <a class="action-btn" href="index.html">Home</a>
+        <button class="action-btn" id="restartBtn">Restart</button>
+      </div>
+    </div>
+
+    <div class="game-hud">
+      <span id="scoreLabel">Score: 0</span>
+      <span id="timeLabel">Time: 30</span>
+    </div>
+
+    <div class="canvas-wrap">
+      <canvas id="gameCanvas" width="900" height="520"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const scoreLabel = document.getElementById("scoreLabel");
+    const timeLabel = document.getElementById("timeLabel");
+    const restartBtn = document.getElementById("restartBtn");
+
+    let score = 0;
+    let timeLeft = 30;
+    let target = null;
+    let gameOver = false;
+    let lastSpawn = 0;
+    let lastTime = 0;
+
+    function makeTarget() {
+      return {
+        x: 80 + Math.random() * (canvas.width - 160),
+        y: 70 + Math.random() * (canvas.height - 160),
+        radius: 18 + Math.random() * 18,
+        color: ["#ff0055", "#ffd166", "#2ecc71", "#5ee5ff"][Math.floor(Math.random() * 4)]
+      };
+    }
+
+    function resetGame() {
+      score = 0;
+      timeLeft = 30;
+      gameOver = false;
+      target = makeTarget();
+      lastSpawn = 0;
+      updateHud();
+    }
+
+    function updateHud() {
+      scoreLabel.textContent = `Score: ${score}`;
+      timeLabel.textContent = `Time: ${Math.ceil(timeLeft)}`;
+    }
+
+    function update(dt) {
+      if (gameOver) return;
+
+      timeLeft -= dt;
+      if (timeLeft <= 0) {
+        timeLeft = 0;
+        gameOver = true;
+      }
+
+      if (target) {
+        target.x += Math.sin((performance.now() / 400) + target.x) * 0.4;
+        target.y += Math.cos((performance.now() / 450) + target.y) * 0.4;
+      }
+
+      updateHud();
+    }
+
+    function drawArena() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const bg = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      bg.addColorStop(0, "#212738");
+      bg.addColorStop(1, "#0b1320");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < 10; i++) {
+        ctx.fillStyle = "rgba(255,255,255,0.05)";
+        ctx.fillRect(i * 90, 0, 1, canvas.height);
+      }
+
+      if (target) {
+        ctx.beginPath();
+        ctx.fillStyle = target.color;
+        ctx.arc(target.x, target.y, target.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(255,255,255,0.5)";
+        ctx.arc(target.x, target.y, target.radius + 8, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+
+    function drawOverlay() {
+      if (!gameOver) return;
+      ctx.fillStyle = "rgba(0,0,0,0.58)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#fff";
+      ctx.textAlign = "center";
+      ctx.font = "bold 38px sans-serif";
+      ctx.fillText("TIME UP!", canvas.width / 2, canvas.height / 2 - 10);
+      ctx.font = "22px sans-serif";
+      ctx.fillText(`Final score: ${score}`, canvas.width / 2, canvas.height / 2 + 28);
+    }
+
+    canvas.addEventListener("click", (event) => {
+      if (gameOver) return;
+      const rect = canvas.getBoundingClientRect();
+      const clickX = ((event.clientX - rect.left) / rect.width) * canvas.width;
+      const clickY = ((event.clientY - rect.top) / rect.height) * canvas.height;
+
+      const dx = clickX - target.x;
+      const dy = clickY - target.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance <= target.radius) {
+        score += 10;
+        target = makeTarget();
+        updateHud();
+      }
+    });
+
+    function loop(timestamp) {
+      const dt = Math.min((timestamp - lastTime) / 1000 || 0.016, 0.025);
+      lastTime = timestamp;
+
+      update(dt);
+      drawArena();
+      drawOverlay();
+      requestAnimationFrame(loop);
+    }
+
+    restartBtn.addEventListener("click", resetGame);
+    resetGame();
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
