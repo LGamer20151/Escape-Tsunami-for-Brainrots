@@ -3,26 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escape Tsunami: Brainrot Edition</title>
+    <title>Galatrix Unblocked - Voxel Sandbox Platform</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="game-wrapper">
-        <header>
-            <h1>ESCAPE TSUNAMI: BRAINROT EDITION</h1>
-            <div id="stats-bar">
-                <span>Score: <strong id="scoreVal">0</strong></span>
-                <span>Level: <strong id="levelVal">1</strong></span>
-            </div>
-        </header>
+    <header>
+        <div class="logo">GALATRIX</div>
+        <nav>
+            <a href="#" class="active">Home</a>
+            <a href="#games">Discover</a>
+            <a href="#multiplayer">Multiplayer</a>
+            <a href="#sandbox">Sandbox</a>
+        </nav>
+    </header>
 
-        <div id="game-container">
-            <canvas id="gameCanvas" width="900" height="450"></canvas>
-            <div id="instructions">Use LEFT / RIGHT arrows or A / D to run away from the wave! Avoid obstacles and collect brainrot powerups.</div>
+    <div class="container">
+        <div class="hero">
+            <h1>The Voxel Sandbox Universe You Can Play Anywhere</h1>
+            <p>Play free browser-based voxel sandbox platform games packed with blocky, immersive worlds. Unblocked and ready to play straight from your browser with no downloads required.</p>
+            <button class="btn" id="welcomeBtn">Play as Guest</button>
+        </div>
+
+        <h2 id="games">Featured Experiences</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="card-img" style="background: linear-gradient(to bottom, #4a90e2, #2c3e50);">Splashpoint</div>
+                <div class="card-content">
+                    <h3>Splashpoint</h3>
+                    <p>Fast-paced multiplayer FPS set across a vivid pastel-toned voxel world with a full five-weapon loadout.</p>
+                    <button class="btn play-btn" data-game="Splashpoint">Play Now</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img" style="background: linear-gradient(to bottom, #c0392b, #8e44ad);">Paintball Nether</div>
+                <div class="card-content">
+                    <h3>Paintball Nether Arena</h3>
+                    <p>Battle opponents in real-time inside a lava-scorched Nether-style arena with destructible terrain.</p>
+                    <button class="btn play-btn" data-game="Paintball Nether Arena">Play Now</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img" style="background: linear-gradient(to bottom, #27ae60, #2980b9);">Artifact Explorer</div>
+                <div class="card-content">
+                    <h3>Artifact Explorer</h3>
+                    <p>Open-world sandbox exploration around a ruined stone castle. Mine resources and construct structures.</p>
+                    <button class="btn play-btn" data-game="Artifact Explorer">Play Now</button>
+                </div>
+            </div>
+        </div>
+
+        <h2 id="multiplayer">Multiplayer & Action Hub</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="card-img" style="background: #2a2d3d;">FFA.PVP</div>
+                <div class="card-content">
+                    <h3>FFA.PVP Arena</h3>
+                    <p>Free-for-all player versus player combat arena designed for fast action sessions.</p>
+                    <button class="btn play-btn" data-game="FFA.PVP Arena">Play Now</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-img" style="background: #2a2d3d;">Escape Car 2</div>
+                <div class="card-content">
+                    <h3>Escape Car 2</h3>
+                    <p>High-speed driving and escape challenges across blocked obstacle courses.</p>
+                    <button class="btn play-btn" data-game="Escape Car 2">Play Now</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-img" style="background: #2a2d3d;">Parkour Obby</div>
+                <div class="card-content">
+                    <h3>Parkour Obby</h3>
+                    <p>Classic obstacle course jumping and timing challenges in 3D blocky environments.</p>
+                    <button class="btn play-btn" data-game="Parkour Obby">Play Now</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script src="game.js"></script>
+    <footer>
+        <p>&copy; 2026 Galatrix Unblocked Games Hub. All rights reserved.</p>
+    </footer>
+
+    <script src="app.js"></script>
 </body>
 </html>
