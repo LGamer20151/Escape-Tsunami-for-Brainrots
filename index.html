@@ -155,6 +155,7 @@
             border-radius: 6px;
             display: block;
             margin: 0 auto;
+            cursor: crosshair;
         }
     </style>
 </head>
@@ -167,7 +168,7 @@
     <div class="container">
         <div class="hero">
             <h1>Unblocked Voxel Sandbox Hub</h1>
-            <p>Click any card below to launch unique arcade and action games.</p>
+            <p>Click any card below to launch three unique, fully playable arcade games.</p>
         </div>
 
         <h2>Featured Games</h2>
@@ -240,63 +241,167 @@
 
         function startSelectedGame() {
             cancelAnimationFrame(animationFrameId);
+            if(currentGame === "tsunami") runTsunamiGame();
+            if(currentGame === "parkour") runParkourGame();
+            if(currentGame === "pvp") runPvpGame();
+        }
 
-            if (currentGame === "tsunami") {
-                let playerX = 100, obsX = 600, score = 0;
-                function loop() {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.fillStyle = "#2e7d32"; ctx.fillRect(0, 300, canvas.width, 50);
-                    ctx.fillStyle = "#ff0055"; ctx.fillRect(playerX, 250, 30, 50);
-                    ctx.fillStyle = "#333"; ctx.fillRect(obsX, 260, 25, 40);
-                    obsX -= 5;
-                    if(obsX < -50) { obsX = canvas.width + Math.random()*150; score += 10; }
-                    ctx.fillStyle = "#fff"; ctx.font = "16px sans-serif";
-                    ctx.fillText("Tsunami Score: " + score, 20, 30);
-                    animationFrameId = requestAnimationFrame(loop);
+        // GAME 1: ESCAPE TSUNAMI
+        function runTsunamiGame() {
+            let playerX = 150, playerY = 250, isJumping = false, jumpVel = 0;
+            let obstacleX = 700, score = 0;
+            let keys = {};
+
+            window.onkeydown = e => keys[e.key] = true;
+            window.onkeyup = e => keys[e.key] = false;
+
+            function loop() {
+                if(modal.style.display === "none") return;
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+
+                // Sky & Ground
+                ctx.fillStyle = "#87ceeb"; ctx.fillRect(0,0,canvas.width,canvas.height);
+                ctx.fillStyle = "#2e7d32"; ctx.fillRect(0,300,canvas.width,50);
+
+                // Controls & Physics
+                if((keys["ArrowUp"] || keys[" "] || keys["w"]) && !isJumping) {
+                    isJumping = true;
+                    jumpVel = -12;
                 }
-                loop();
-            } 
-            else if (currentGame === "parkour") {
-                let py = 250, vy = 0, platX = 500, score = 0;
-                window.onkeydown = () => { if(py >= 250) vy = -10; };
-                function loop() {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    vy += 0.5; py += vy;
-                    if(py > 250) { py = 250; vy = 0; }
-                    ctx.fillStyle = "#1e90ff"; ctx.fillRect(100, py, 30, 30);
-                    ctx.fillStyle = "#f39c12"; ctx.fillRect(platX, 270, 60, 30);
-                    platX -= 4;
-                    if(platX < -60) { platX = canvas.width + 100; score += 15; }
-                    ctx.fillStyle = "#fff"; ctx.font = "16px sans-serif";
-                    ctx.fillText("Press Any Key to Jump | Score: " + score, 20, 30);
-                    animationFrameId = requestAnimationFrame(loop);
-                }
-                loop();
-            } 
-            else if (currentGame === "pvp") {
-                let targetX = 350, targetY = 175, score = 0;
-                canvas.onclick = (e) => {
-                    const rect = canvas.getBoundingClientRect();
-                    const mx = e.clientX - rect.left;
-                    const my = e.clientY - rect.top;
-                    if(Math.hypot(mx - targetX, my - targetY) < 25) {
-                        score += 100;
-                        targetX = Math.random() * 500 + 100;
-                        targetY = Math.random() * 200 + 75;
-                    }
-                };
-                function loop() {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.fillStyle = "#e74c3c";
-                    ctx.beginPath();
-                    ctx.arc(targetX, targetY, 25, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.fillStyle = "#fff"; ctx.font = "16px sans-serif";
-                    ctx.fillText("Click the Target! Score: " + score, 20, 30);
-                    animationFrameId = requestAnimationFrame(loop);
-                }
-                loop();
+                playerY += jumpVel;
+                jumpVel += 0.6;
+                if(playerY > 250) { playerY = 250; isJumping = false; }
+
+                obstacleX -= 5;
+                if(obstacleX < -40) { obstacleX = 700; score += 10; }
+
+                // Draw Player
+                ctx.fillStyle = "#ff0055";
+                ctx.fillRect(playerX, playerY, 30, 50);
+
+                // Draw Obstacle
+                ctx.fillStyle = "#333";
+                ctx.fillRect(obstacleX, 260, 30, 40);
+
+                // Score
+                ctx.fillStyle = "#fff";
+                ctx.font = "bold 16px sans-serif";
+                ctx.fillText("Score: " + score, 20, 30);
+                ctx.fillText("Controls: UP or SPACE to Jump", 20, 55);
+
+                animationFrameId = requestAnimationFrame(loop);
             }
+            loop();
+        }
+
+        // GAME 2: PARKOUR OBBY
+        function runParkourGame() {
+            let playerX = 100, playerY = 250, isJumping = false, jumpVel = 0;
+            let platforms = [
+                {x: 300, y: 240, w: 100, h: 20},
+                {x: 500, y: 180, w: 100, h: 20},
+                {x: 700, y: 120, w: 100, h: 20}
+            ];
+            let score = 0;
+            let keys = {};
+
+            window.onkeydown = e => keys[e.key] = true;
+            window.onkeyup = e => keys[e.key] = false;
+
+            function loop() {
+                if(modal.style.display === "none") return;
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+
+                ctx.fillStyle = "#1e1e2f"; ctx.fillRect(0,0,canvas.width,canvas.height);
+                ctx.fillStyle = "#444"; ctx.fillRect(0,300,canvas.width,50);
+
+                if((keys["ArrowLeft"] || keys["a"]) && playerX > 0) playerX -= 4;
+                if((keys["ArrowRight"] || keys["d"]) && playerX < canvas.width) playerX += 4;
+                if((keys["ArrowUp"] || keys[" "] || keys["w"]) && !isJumping) {
+                    isJumping = true;
+                    jumpVel = -10;
+                }
+
+                playerY += jumpVel;
+                jumpVel += 0.5;
+                if(playerY > 250) { playerY = 250; isJumping = false; }
+
+                // Move platforms left
+                platforms.forEach(p => {
+                    p.x -= 2;
+                    if(p.x < -100) { p.x = canvas.width + Math.random() * 100; p.y = 120 + Math.random() * 120; score += 5; }
+                    
+                    // Draw platform
+                    ctx.fillStyle = "#00ffcc";
+                    ctx.fillRect(p.x, p.y, p.w, p.h);
+
+                    // Collision
+                    if(playerX + 30 > p.x && playerX < p.x + p.w && playerY + 50 >= p.y && playerY + 50 <= p.y + 15 && jumpVel > 0) {
+                        playerY = p.y - 50;
+                        isJumping = false;
+                        jumpVel = 0;
+                    }
+                });
+
+                // Draw Player
+                ctx.fillStyle = "#ff007f";
+                ctx.fillRect(playerX, playerY, 30, 50);
+
+                ctx.fillStyle = "#fff";
+                ctx.font = "bold 16px sans-serif";
+                ctx.fillText("Score: " + score, 20, 30);
+                ctx.fillText("Controls: A/D to Move, SPACE to Jump", 20, 55);
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // GAME 3: FFA.PVP ARENA (AIM TRAINER)
+        function runPvpGame() {
+            let score = 0;
+            let target = { x: 350, y: 175, radius: 25, timer: 0 };
+
+            canvas.onmousedown = (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+                const dist = Math.hypot(mouseX - target.x, mouseY - target.y);
+                if(dist < target.radius) {
+                    score += 10;
+                    spawnTarget();
+                }
+            };
+
+            function spawnTarget() {
+                target.x = 50 + Math.random() * (canvas.width - 100);
+                target.y = 50 + Math.random() * (canvas.height - 100);
+            }
+
+            function loop() {
+                if(modal.style.display === "none") return;
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+
+                ctx.fillStyle = "#111827"; ctx.fillRect(0,0,canvas.width,canvas.height);
+
+                // Draw Target
+                ctx.fillStyle = "#ff0055";
+                ctx.beginPath();
+                ctx.arc(target.x, target.y, target.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = "#ffffff";
+                ctx.beginPath();
+                ctx.arc(target.x, target.y, target.radius * 0.4, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = "#fff";
+                ctx.font = "bold 16px sans-serif";
+                ctx.fillText("Score: " + score, 20, 30);
+                ctx.fillText("Controls: Click the red targets as fast as you can!", 20, 55);
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
         }
     </script>
 </body>
